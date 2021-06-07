@@ -1,72 +1,144 @@
-import 'dart:async';
-import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: 'AAAAA',
+    home: Home(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
+class Myapp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Bebas',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: HomePage(),
+      home: Home(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
-  Future<List> getData() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.0.108/go_asin/getdata.php'));
-    return json.decode(response.body);
-  }
+class _HomeState extends State<Home> {
+//   File _image;
+//   final picker = ImagePicker();
+
+//   Future getImage() async {
+//     final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+//     setState(() {
+//       if (pickedFile != null) {
+//         _image = File(pickedFile.path);
+//       } else {
+//         print('No image selected.');
+//       }
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: Text('Dashboard'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Masukkan Data'),
+        backgroundColor: Colors.greenAccent,
       ),
-      body: new FutureBuilder<List>(
-        future: getData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-
-          return snapshot.hasData
-              ? new ItemList(
-                  list: [snapshot.data],
-                )
-              : new Center(
-                  child: new CircularProgressIndicator(),
-                );
-        },
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        child: ListView(
+          children: <Widget>[
+            Center(
+              child: Column(
+                children: <Widget>[
+                  _form(),
+                  // _pickImage(),
+                  _button(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-}
 
-class ItemList extends StatelessWidget {
-  final List list;
-  ItemList({required this.list});
-  @override
-  Widget build(BuildContext context) {
-    return new ListView.builder(
-      // ignore: unnecessary_null_comparison
-      itemCount: list == null ? 0 : list.length,
-      itemBuilder: (context, i) {
-        return new Text(list[i]['no_sertifikat']);
-      },
+  Widget _form() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 16.0),
+        ),
+        new TextField(
+          decoration: new InputDecoration(
+              hintText: "Nama Aset",
+              labelText: "Nama Aset",
+              border: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(15.0))),
+        ),
+        new Padding(
+          padding: new EdgeInsets.all(10.0),
+        ),
+        new TextField(
+          obscureText: true,
+          decoration: new InputDecoration(
+              hintText: "Alamat",
+              labelText: "Alamat",
+              border: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(15.0))),
+        ),
+        new Padding(
+          padding: new EdgeInsets.all(10.0),
+        ),
+        new TextField(
+          decoration: new InputDecoration(
+              hintText: "Luas",
+              labelText: "Luas ",
+              border: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(15.0))),
+        ),
+      ],
+    );
+  }
+
+  // Widget _pickImage() {
+  //   return Scaffold(
+  //     body: Center(
+  //       child: _image == null ? Text('No image selected.') : Image.file(_image),
+  //     ),
+  //     floatingActionButton: FloatingActionButton(
+  //       onPressed: getImage,
+  //       tooltip: 'Pick Image',
+  //       child: Icon(Icons.add_a_photo),
+  //     ),
+  //   );
+  // }
+
+  Widget _button() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 16.0),
+        ),
+        FlatButton(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 10.0),
+              width: double.infinity,
+              child: Text(
+                "Selesai",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+            ),
+            onPressed: () {}),
+      ],
     );
   }
 }
